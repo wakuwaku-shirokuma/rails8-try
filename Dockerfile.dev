@@ -11,14 +11,19 @@ RUN apt-get update -qq && \
       build-essential curl git libpq-dev libvips libyaml-dev pkg-config && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
+# 環境変数
 ENV RAILS_ENV=development \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_FORCE_RUBY_PLATFORM=1
 
+# Gem インストール
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
+# プロジェクトコピー
 COPY . .
 
 EXPOSE 3000
+
+# Rails サーバ起動
 CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
