@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :companies
+    root to: "companies#index"
+  end
+
   resources :companies
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
