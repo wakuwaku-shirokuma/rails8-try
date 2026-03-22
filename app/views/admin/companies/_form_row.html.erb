@@ -1,0 +1,38 @@
+<tr id="<%= resource.persisted? ? dom_id(resource) : 'new_company' %>">
+  <td><%= resource.id if resource.persisted? %></td>
+  <td colspan="4">
+    <%= form_with model: resource,
+      url: resource.persisted? ? admin_company_path(resource) : admin_companies_path,
+      method: resource.persisted? ? :patch : :post,
+      data: { turbo_stream: true } do |f| %>
+      <div style="display: flex; gap: 8px;">
+        <div style="flex: 1;">
+          <%= f.text_field :name, style: "width: 100%;" %>
+        </div>
+        <div style="flex: 1;">
+          <%= f.text_field :description, style: "width: 100%;" %>
+        </div>
+        <div style="flex: 1; display: flex; align-items: center;">
+          <span>
+            <%= (resource.created_at || Time.current).strftime("%Y/%m/%d %H:%M") %>
+          </span>
+        </div>
+        <div>
+          <%= f.submit "保存", class: "button" %>
+          <% if resource.persisted? %>
+            <%= link_to "キャンセル",
+              admin_company_path(resource),
+              data: { turbo_stream: true },
+              class: "button" %>
+          <% else %>
+            <%= link_to "キャンセル",
+              "#",
+              onclick: "this.closest('tr').remove(); return false;",
+              class: "button" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </td>
+  <td></td>
+</tr>
