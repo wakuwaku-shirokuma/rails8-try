@@ -1,0 +1,35 @@
+<tr id="<%= resource.persisted? ? dom_id(resource) : 'new_company' %>"
+    data-controller="row">
+  <td><%= resource.id if resource.persisted? %></td>
+  <td colspan="4">
+    <%= form_with model: [:admin, resource], data: { turbo_stream: true } do |f| %>
+      <div class="form-row-fields">
+        <div class="form-row-field">
+          <%= f.text_field :name, style: "width: 100%;" %>
+        </div>
+        <div class="form-row-field">
+          <%= f.text_field :description, style: "width: 100%;" %>
+        </div>
+        <div class="form-row-field--center">
+          <span>
+            <%= format_datetime(resource.created_at) %>
+          </span>
+        </div>
+        <div>
+          <%= f.submit "保存", class: "button" %>
+          <% if resource.persisted? %>
+            <%= link_to "キャンセル",
+              admin_company_path(resource),
+              data: { turbo_stream: true },
+              class: "button" %>
+          <% else %>
+            <%= link_to "キャンセル", "#",
+              data: { action: "row#remove" },
+              class: "button" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </td>
+  <td></td>
+</tr>
