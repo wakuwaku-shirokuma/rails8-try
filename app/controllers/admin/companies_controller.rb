@@ -7,18 +7,11 @@ module Admin
     end
 
     def new
-      resource = new_resource
-      authorize_resource(resource)
+      @resource = new_resource
+      authorize_resource(@resource)
 
       respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.append(
-            "companies-tbody",
-            partial: "admin/companies/form_row",
-            locals: { resource: resource }
-          )
-        end
-
+        format.turbo_stream
         format.html
       end
     end
@@ -27,40 +20,40 @@ module Admin
       authorize_resource(@resource)
 
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: form_row_stream(@resource) }
+        format.turbo_stream
         format.html
       end
     end
 
     def show
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: row_stream(@resource) }
+        format.turbo_stream
         format.html
       end
     end
 
     def create
-      resource = new_resource(resource_params)
-      authorize_resource(resource)
+      @resource = new_resource(resource_params)
+      authorize_resource(@resource)
 
-      if resource.save
+      if @resource.save
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: row_stream(resource, id: "new_company") }
+          format.turbo_stream
           format.html { redirect_to admin_companies_path }
         end
       else
-        render turbo_stream: form_row_stream(resource, id: "new_company"), status: :unprocessable_entity
+        render :edit, formats: [ :turbo_stream ], status: :unprocessable_entity
       end
     end
 
     def update
       if @resource.update(resource_params)
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: row_stream(@resource) }
+          format.turbo_stream
           format.html { redirect_to admin_companies_path }
         end
       else
-        render turbo_stream: form_row_stream(@resource), status: :unprocessable_entity
+        render :edit, formats: [ :turbo_stream ], status: :unprocessable_entity
       end
     end
 
@@ -68,14 +61,6 @@ module Admin
 
     def set_resource
       @resource = requested_resource
-    end
-
-    def row_stream(resource, id: view_context.dom_id(resource))
-      turbo_stream.replace(id, partial: "admin/companies/row", locals: { resource: resource })
-    end
-
-    def form_row_stream(resource, id: view_context.dom_id(resource))
-      turbo_stream.replace(id, partial: "admin/companies/form_row", locals: { resource: resource })
     end
   end
 end
