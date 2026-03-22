@@ -1,0 +1,14 @@
+.form-row-fields {
+  display: flex;
+  gap: 8px;
+}
+
+.form-row-field {
+  flex: 1;
+}
+
+.form-row-field--center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
